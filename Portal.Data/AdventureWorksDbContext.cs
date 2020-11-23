@@ -1,10 +1,11 @@
 ﻿using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Portal.Data.Models;
 
 #nullable disable
 
-namespace Portal.Data.Models
+namespace Portal.Data
 {
     public partial class AdventureWorksDbContext : DbContext
     {
