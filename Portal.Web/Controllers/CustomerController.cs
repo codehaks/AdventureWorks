@@ -19,7 +19,13 @@ namespace Portal.Web.Controllers
         [Route("api/customer")]
         public IActionResult Index()
         {
-            var customers = _db.DimCustomers.Take(10);
+            var customers = _db.DimCustomers
+                .Select(c => new
+                {
+                    First = c.FirstName,
+                    Last = c.LastName
+                })
+                .Take(10);
 
             return Ok(customers);
         }
