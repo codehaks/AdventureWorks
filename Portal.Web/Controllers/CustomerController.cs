@@ -7,6 +7,12 @@ using System.Threading.Tasks;
 
 namespace Portal.Web.Controllers
 {
+    public class CustomerData
+    {
+        public string FirstName { get; set; }
+        public string LastName { get; set; }
+        public string EmailAddress { get; set; }
+    }
     public class CustomerController : Controller
     {
         private readonly AdventureWorksDbContext _db;
@@ -16,18 +22,46 @@ namespace Portal.Web.Controllers
             _db = db;
         }
 
+       
+
         [Route("api/customer")]
+        public IActionResult Get()
+        {
+            var q1 = _db.DimCustomers
+                .Select(c => new CustomerData
+                {
+                    FirstName = c.FirstName,
+                    LastName = c.LastName,
+                    EmailAddress = c.EmailAddress
+                })
+                .Take(100);
+
+            var q2 = q1.Where(c => c.FirstName.StartsWith("A"));
+
+            var q3 = q2.Where(c => c.LastName.StartsWith("B"));
+
+            return Ok(q3);
+        }
+
+        [Route("customers")]
         public IActionResult Index()
         {
-            var customers = _db.DimCustomers
-                .Select(c => new
+            var q1 = _db.DimCustomers
+                .Select(c => new CustomerData
                 {
-                    First = c.FirstName,
-                    Last = c.LastName
+                    FirstName = c.FirstName,
+                    LastName = c.LastName,
+                    EmailAddress = c.EmailAddress
                 })
-                .Take(10);
+                .Take(100);
 
-            return Ok(customers);
+            var q2 = q1.Where(c => c.FirstName.StartsWith("A"));
+
+            var q3 = q2.Where(c => c.LastName.StartsWith("B"))
+                .ToList();
+
+            return View(q3);
         }
     }
 }
+

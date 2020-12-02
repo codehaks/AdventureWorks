@@ -27,7 +27,7 @@ namespace Portal.Web
             services.AddDbContext<AdventureWorksDbContext>(options =>
             {
                 options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection"));
-                options.LogTo(Console.WriteLine);
+                options.LogTo(Console.WriteLine,Microsoft.Extensions.Logging.LogLevel.Information);
             });
 
             services.AddControllersWithViews();

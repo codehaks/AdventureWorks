@@ -1,0 +1,8 @@
+﻿@model IEnumerable<Portal.Web.Controllers.CustomerData>
+
+@foreach (var item in Model)
+{
+    <p>
+        @item.FirstName , @item.LastName , @item.EmailAddress
+    </p>
+}
