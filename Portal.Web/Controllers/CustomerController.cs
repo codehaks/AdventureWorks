@@ -24,16 +24,12 @@ namespace Portal.Web.Controllers
             _logger = logger;
         }
 
-        [Route("api/customer/{id}")]
+        [Route("api/customer/last")]
         public IActionResult Get(int id)
         {
             var customer = _db.DimCustomers
                 .OrderByDescending(c=>c.BirthDate)
                 .Last(c=>c.FirstName=="David");
-
-            //_logger.LogInformation("Logging the second customer with {0}", id);
-
-           // var c= _db.DimCustomers.Single(c => c.CustomerKey == id);
 
             return Ok(customer);
         }
