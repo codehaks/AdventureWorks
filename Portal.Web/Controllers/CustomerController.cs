@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 using Portal.Data;
 using System;
 using System.Collections.Generic;
@@ -16,13 +17,26 @@ namespace Portal.Web.Controllers
     public class CustomerController : Controller
     {
         private readonly AdventureWorksDbContext _db;
-
-        public CustomerController(AdventureWorksDbContext db)
+        private readonly ILogger _logger;
+        public CustomerController(AdventureWorksDbContext db, ILogger<CustomerController> logger)
         {
             _db = db;
+            _logger = logger;
         }
 
-       
+        [Route("api/customer/{id}")]
+        public IActionResult Get(int id)
+        {
+            var customer = _db.DimCustomers
+                .OrderByDescending(c=>c.BirthDate)
+                .Last(c=>c.FirstName=="David");
+
+            //_logger.LogInformation("Logging the second customer with {0}", id);
+
+           // var c= _db.DimCustomers.Single(c => c.CustomerKey == id);
+
+            return Ok(customer);
+        }
 
         [Route("api/customer")]
         public IActionResult Get()

@@ -24,6 +24,7 @@ namespace Portal.Web
 
         public void ConfigureServices(IServiceCollection services)
         {
+            // Scoped
             services.AddDbContext<AdventureWorksDbContext>(options =>
             {
                 options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection"));
