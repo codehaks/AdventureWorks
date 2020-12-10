@@ -30,7 +30,6 @@ namespace Portal.Web
                 options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection"));
                 options.LogTo(Console.WriteLine,Microsoft.Extensions.Logging.LogLevel.Information);
             });
-
             services.AddControllersWithViews();
         }
 

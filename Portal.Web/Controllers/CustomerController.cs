@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Portal.Data;
+using Portal.Data.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -24,12 +25,39 @@ namespace Portal.Web.Controllers
             _logger = logger;
         }
 
+        [Route("api/customer/take")]
+        public IActionResult GetTake()
+        {
+            var customer = _db.DimCustomers
+                .OrderBy(c => c.BirthDate)
+                .Skip(20)
+                .Take(10);
+            return Ok(customer);
+        }
+
+        [Route("api/customer/sale")]
+        public IActionResult GetSale()
+        {
+            //var customer = _db
+            //    .DimCustomers
+            //    .Where(c => c.BirthDate.HasValue && c.BirthDate.Value.Year == 1950)
+            //    .Count();
+            List<int> number = new List<int>() { 10, 20 };
+            List<DimCustomer> customers = new();
+            var sales = _db.FactInternetSales
+                .SelectMany(s => customers,
+                (f, c) => new { f.SalesAmount }
+              );
+
+            return Ok(sales);
+        }
+
         [Route("api/customer/last")]
         public IActionResult Get(int id)
         {
             var customer = _db.DimCustomers
-                .OrderByDescending(c=>c.BirthDate)
-                .Last(c=>c.FirstName=="David");
+                .OrderByDescending(c => c.BirthDate)
+                .Last(c => c.FirstName == "David");
 
             return Ok(customer);
         }
