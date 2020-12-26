@@ -25,15 +25,38 @@ namespace Portal.Web.Controllers
             _logger = logger;
         }
 
+        bool IsLeapYear(int year)
+        {
+            return (year % 4 == 0);
+        }
+
         [Route("api/customer/take")]
         public IActionResult GetTake()
         {
             var customer = _db.DimCustomers
+                .ToList()
+                //.Where(c=>c.FirstName.StartsWith("h"))
+                .Where(c=>c.BirthDate.HasValue && IsLeapYear(c.BirthDate.Value.Year))
                 .OrderBy(c => c.BirthDate)
-                .Skip(20)
                 .Take(10);
             return Ok(customer);
         }
+
+        [Route("api/customer/find")]
+        public IActionResult GetCustomer()
+        {
+            var customer = _db.DimCustomers
+                .SingleOrDefault(c => c.CustomerKey == 12725);
+
+            customer.FirstName = "Ali";
+
+            var entries = _db.ChangeTracker.Entries<DimCustomer>();
+
+          //  _db.SaveChanges();
+
+            return Ok(customer);
+        }
+
 
         [Route("api/customer/sale")]
         public IActionResult GetSale()
